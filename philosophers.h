@@ -3,7 +3,7 @@
 
 #include <limits.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -31,10 +31,21 @@ typedef struct s_philo {
     t_data    *data;
 } t_philo;
 
-
-
-
-int arguments_check(int ac, char **av);
-int	ft_atoi(const char *str);
-
+int     data_init(t_data *d, t_rules rules);
+int     forks_init(t_data * d);
+void    data_cleanup(t_data *d);
+int     arguments_check(int ac, char **av);
+int     ft_atoi(const char *str);
+t_rules parse_rules(int ac, char **av);
+int     forks_init(t_data *d);
+void    data_cleanup(t_data *d);
+int     philo_init_all(t_philo **out, t_data *d);
+void    ft_usleep(int  ms);
+long long   now_ms(void);
+void    *philo_routine(void *arg);
+void    log_state(t_philo *p, const char *msg);
+void    release_forks(t_philo *p);
+void    take_forks(t_philo *p);
+int  get_stop(t_data *d);
+void set_stop(t_data *d, int value);
 #endif
