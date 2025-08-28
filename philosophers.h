@@ -46,6 +46,8 @@ void    *philo_routine(void *arg);
 void    log_state(t_philo *p, const char *msg);
 void    release_forks(t_philo *p);
 void    take_forks(t_philo *p);
-int  get_stop(t_data *d);
-void set_stop(t_data *d, int value);
+int     get_stop(t_data *d);
+void    set_stop(t_data *d, int value);
+void    *monitor_routine(void *arg);
+
 #endif

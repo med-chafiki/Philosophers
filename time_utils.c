@@ -1,11 +1,10 @@
 #include "philosophers.h"
 
-long long   now_ms(void)
+long long now_ms(void)
 {
-    struct timeval  tv;
-
+    struct timeval tv;
     gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 100LL + tv.tv_usec / 1000);
+    return (tv.tv_sec * 1000LL + tv.tv_usec / 1000);
 }
 
 void ft_usleep(int  ms)

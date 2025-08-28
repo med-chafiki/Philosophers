@@ -32,33 +32,55 @@ void    release_forks(t_philo *p)
     pthread_mutex_unlock(&p->data->forks[p->rfork]);
 }
 
-void    *philo_routine(void *arg)
+void *philo_routine(void *arg)
 {
     t_philo *p;
 
     p = (t_philo *)arg;
     if (p->id % 2 == 0)
         ft_usleep(1);
+
+    if (p->data->rules.philos == 1)
+    {
+        log_state(p, "is thinking");
+        pthread_mutex_lock(&p->data->forks[p->lfork]);
+        log_state(p, "has taken a fork");
+        ft_usleep(p->data->rules.t_die);
+        pthread_mutex_unlock(&p->data->forks[p->lfork]);
+        return (NULL);
+    }
     while (!get_stop(p->data))
     {
-     log_state(p, "is thinking");
-     take_forks(p);
-     p->last_meal = now_ms();
-     log_state(p, "is eating");
-     ft_usleep(p->data->rules.t_eat);
-     release_forks(p);
-     log_state(p, "is sleeping");
-     ft_usleep(p->data->rules.t_sleep);   
-    }
-    
-    
+        log_state(p, "is thinking");
 
+        take_forks(p);
+        if (get_stop(p->data)) {
+            release_forks(p);
+            return (NULL);
+        }
+
+        p->last_meal = now_ms();
+        p->meals++; 
+        log_state(p, "is eating");
+        ft_usleep(p->data->rules.t_eat);
+        release_forks(p);
+
+        if (get_stop(p->data))
+            return (NULL);
+
+        log_state(p, "is sleeping");
+        ft_usleep(p->data->rules.t_sleep);
+    }
     return (NULL);
 }
 
+
 void    log_state(t_philo *p, const char *msg)
 {
-    long    long    ts;
+    long long ts;
+
+    if (get_stop(p->data))
+        return;
 
     pthread_mutex_lock(&p->data->print);
     ts = now_ms() - p->data->start_ms;
