@@ -42,32 +42,24 @@ int ph_eat(t_philo *p)
     if (!take_forks(p))
         return (0);
 
-    if (get_stop(p->data)) {
+    if (get_stop(p->data))
+    {
         release_forks(p);
         return (0);
     }
 
-    /* mark start of meal */
+    /* mark start of meal and PRINT while holding meal_mtx */
     pthread_mutex_lock(&p->meal_mtx);
     p->last_meal = now_ms();
+    log_state(p, "is eating");      /* prints before the increment */
+    p->meals++;                     /* monitor can only see this after print */
     pthread_mutex_unlock(&p->meal_mtx);
 
-    /* do the eating (this one must be counted/printed) */
-    log_state(p, "is eating");
     ft_usleep(p->data->rules.t_eat);
-
     release_forks(p);
+
     if (get_stop(p->data))
         return (0);
-
-    /* after a successful eat, bump meals and decide whether to exit */
-    pthread_mutex_lock(&p->meal_mtx);
-    p->meals++;
-    int done = (p->data->rules.must_eat > 0 && p->meals >= p->data->rules.must_eat);
-    pthread_mutex_unlock(&p->meal_mtx);
-
-    if (done)
-        return (0);  /* this philo is finished */
 
     return (1);
 }
