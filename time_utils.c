@@ -10,7 +10,7 @@ long long	now_ms(void)
 
 void	ft_usleep(int ms)
 {
-	long long start;
+	long long	start;
 
 	start = now_ms();
 	while (now_ms() - start < ms)

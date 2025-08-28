@@ -1,9 +1,10 @@
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror -pthread
 
 NAME    = philo
 
-SRC     = $(wildcard *.c)
+SRC     = forks.c forks_plus.c initialization.c initialization_plus.c \
+          main.c monitor.c tools.c toolds1.c time_utils.c
 OBJ     = $(SRC:.c=.o)
 
 all: $(NAME)
@@ -23,4 +24,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
